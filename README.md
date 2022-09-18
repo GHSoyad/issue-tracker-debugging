@@ -6,3 +6,5 @@ Bug list:
 2. Close status not updating
 3. Close button not updating
 4. Close button not changing back to Open
+5. Delete button not working
+6. Deleting issue not updating issue list
