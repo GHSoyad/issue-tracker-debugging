@@ -34,10 +34,13 @@ const closeIssue = id => {
 }
 
 const deleteIssue = id => {
-    const issues = JSON.parse(localStorage.getItem('issues'));
-    const remainingIssues = issues.filter(issue => parseInt(issue.id) !== parseInt(id))
-    localStorage.setItem('issues', JSON.stringify(remainingIssues));
-    fetchIssues();
+    const answer = confirm('Are you sure want to delete!');
+    if (answer === true) {
+        const issues = JSON.parse(localStorage.getItem('issues'));
+        const remainingIssues = issues.filter(issue => parseInt(issue.id) !== parseInt(id))
+        localStorage.setItem('issues', JSON.stringify(remainingIssues));
+        fetchIssues();
+    }
 }
 
 const fetchIssues = () => {
@@ -45,17 +48,19 @@ const fetchIssues = () => {
     const issuesList = document.getElementById('issuesList');
     issuesList.innerHTML = '';
 
+
     for (var i = 0; i < issues.length; i++) {
         const { id, description, severity, assignedTo, status } = issues[i];
-
-        issuesList.innerHTML += `<div class="well">
-                              <h6>Issue ID: ${id} </h6>
-                              <p><span class="label label-info"> ${status} </span></p>
-                              <h3> ${description} </h3>
-                              <p><span class="glyphicon glyphicon-time"></span> ${severity}</p>
-                              <p><span class="glyphicon glyphicon-user"></span> ${assignedTo}</p>
-                              <a onclick="closeIssue(${id})" class="btn btn-warning">${status}</a>
-                              <a onclick="deleteIssue(${id})" class="btn btn-danger">Delete</a>
-                              </div>`;
+        issuesList.innerHTML += `
+        <div class="well">
+            <h6>Issue ID: ${id} </h6>
+            <p>Status: <span class="label label-info"> ${status} </span></p>
+            <h3>${status === 'Open' ? description : `<del>${description}</del>`}</h3>
+            <p><span class="glyphicon glyphicon-time"></span> ${severity}</p>
+            <p><span class="glyphicon glyphicon-user"></span> ${assignedTo}</p>
+            <a onclick="closeIssue(${id})" class="btn btn-warning">${status === 'Open' ? 'Close' : 'Open'}</a>
+            <a onclick="deleteIssue(${id})" class="btn btn-danger">Delete</a>
+        </div>
+        `;
     }
 }
